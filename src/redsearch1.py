@@ -5,7 +5,7 @@ import os
 
 
 def fetch_json(url, retries=3):
-    headers = {"User-Agent": "RedSearchScript by u/yourusernamehere"}
+    headers = {"User-Agent": "RedSearchScript by u/yourusername"}
     for _ in range(retries):
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
@@ -30,7 +30,11 @@ def fetch_user_comments(username, limit, paginate=False):
         if not data or 'data' not in data or not data['data']['children']:
             break
         for c in data['data']['children']:
-            comments.append(c['data']['body'])
+            comments.append({
+                "body": c['data']['body'],
+                "subreddit": c['data']['subreddit'],
+                "permalink": f"https://reddit.com{c['data']['permalink']}"
+            })
         remaining -= len(data['data']['children'])
         after = data['data'].get('after')
         if not after or not paginate:
@@ -55,7 +59,11 @@ def fetch_user_posts(username, limit, paginate=False):
             full_text = title
             if selftext and selftext not in ['[removed]', '[deleted]']:
                 full_text += "\n" + selftext
-            posts.append(full_text)
+            posts.append({
+                "body": full_text,
+                "subreddit": p['data']['subreddit'],
+                "permalink": f"https://reddit.com{p['data']['permalink']}"
+            })
         remaining -= len(data['data']['children'])
         after = data['data'].get('after')
         if not after or not paginate:
@@ -68,11 +76,13 @@ def save_results(username, comments, posts):
         if comments:
             f.write(f"Comments by u/{username}:\n\n")
             for c in comments:
-                f.write(f"u/{username}: {c}\n{'-'*60}\n")
+                f.write(f"u/{username} in r/{c['subreddit']}: {c['body']}\n")
+                f.write(f"Link: {c['permalink']}\n{'-'*60}\n")
         if posts:
             f.write(f"\nPosts by u/{username}:\n\n")
             for p in posts:
-                f.write(f"u/{username}: {p}\n{'-'*60}\n")
+                f.write(f"u/{username} in r/{p['subreddit']}: {p['body']}\n")
+                f.write(f"Link: {p['permalink']}\n{'-'*60}\n")
     print(f"\nResults saved to {os.path.abspath(filename)}")
 
 
@@ -94,7 +104,7 @@ def main():
         light_mode = False
         paginate = False
     elif mode == '3':
-        comment_limit = 10000  
+        comment_limit = 10000  # high number to fetch all
         post_limit = 10000
         light_mode = False
         paginate = True
@@ -110,14 +120,16 @@ def main():
     print(f"\nYou can also browse the results here: {google_search_url}\n")
     
 
-    
+   
     comments = fetch_user_comments(username, comment_limit, paginate)
     if comments:
         print(f"Comments by u/{username}:\n")
         for c in comments:
-            print(f"u/{username}: {c}\n{'-'*60}")
+            print(f"u/{username} in r/{c['subreddit']}: {c['body']}")
+            print(f"Link: {c['permalink']}\n{'-'*60}")
     else:
         print(f"No comments found for u/{username}.")
+
 
     show_posts = True
     if light_mode:
@@ -130,7 +142,8 @@ def main():
         if posts:
             print(f"\nPosts by u/{username}:\n")
             for p in posts:
-                print(f"u/{username}: {p}\n{'-'*60}")
+                print(f"u/{username} in r/{p['subreddit']}: {p['body']}")
+                print(f"Link: {p['permalink']}\n{'-'*60}")
         else:
             print(f"No posts found for u/{username}.")
 
