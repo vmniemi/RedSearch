@@ -127,7 +127,7 @@ Added an option for the user to decide whether to view posts.
 
 Retained Google search link for convenience.
 
-# Modes
+## Modes
 
 RedSearch1.py offers three search modes to control how many comments and posts are fetched:
 
@@ -164,6 +164,11 @@ In all modes, a Google search link is provided to browse the user’s activity.
 Output includes the username, subreddit, comment/post content, and permalink.
 
 Max Mode can take up to several minutes depending of the amount of posts and comments the user has made 
+
+
+## Updated features
+
+- Save results as .csv and .json for possible future NLP analysis
 
 
 
