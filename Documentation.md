@@ -1,10 +1,10 @@
-Legal and Terms of Service Disclaimer
+## Legal and Terms of Service Disclaimer
 
 RedSearch is a tool for accessing publicly available Reddit content only. It fetches user comments and posts that are visible to anyone on Reddit without bypassing any authentication or accessing private content.
 
-Important Notes:
+## Important Notes:
 
-Public Content Only:
+# Public Content Only:
 
 RedSearch only retrieves data from public subreddits and user profiles.
 
@@ -16,11 +16,11 @@ The tool respects Reddit’s rate limits for unauthenticated requests (~60 reque
 
 Excessive automated requests may be flagged; use responsibly.
 
-User-Agent Compliance:
+# User-Agent Compliance:
 
 All requests include a custom User-Agent to identify the script, following Reddit API guidelines.
 
-Personal Use:
+# Personal Use:
 
 RedSearch is intended for personal research, reference, or analysis.
 
@@ -111,7 +111,7 @@ Posts: /user/<username>/submitted.json
 
 Maximum 100 items per request; pagination required for more.
 
-Python Program:
+# Python Program:
 
 Implemented requests.get with a User-Agent header to avoid 429 errors.
 
@@ -155,7 +155,7 @@ Uses pagination to retrieve more than 100 items if necessary.
 
 Ideal for comprehensive data collection.
 
-Additional Notes:
+# Additional Notes:
 
 These modes are made for ease of use, naturally they can be adjusted in the code itself if needed in the comment_limit and post_limit respectively
 
